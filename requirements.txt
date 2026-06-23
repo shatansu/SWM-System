@@ -1,0 +1,8 @@
+fastapi
+firebase-admin
+google-generativeai
+opencv-python
+pydantic-settings
+python-dotenv
+python-multipart
+uvicorn
