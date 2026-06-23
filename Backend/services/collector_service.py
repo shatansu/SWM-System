@@ -1,7 +1,7 @@
 from db.mongodb_connection import reports_collection
 from bson import ObjectId
 from datetime import datetime
-from constants.status import ACCEPTED
+from constants.status import ACCEPTED, ON_THE_WAY, COMPLETED
 
 def get_pending_reports():
 
@@ -40,6 +40,34 @@ def accept_report(report_id: str, collector_id: str):
                 "status": ACCEPTED,
                 "collector_id": collector_id,
                 "accepted_at": datetime.utcnow()
+            }
+        }
+    )
+
+    return result.modified_count
+
+def start_pickup(report_id: str):
+
+    result = reports_collection.update_one(
+        {"_id": ObjectId(report_id)},
+        {
+            "$set": {
+                "status": ON_THE_WAY,
+                "started_at": datetime.utcnow()
+            }
+        }
+    )
+
+    return result.modified_count
+
+def complete_pickup(report_id: str):
+
+    result = reports_collection.update_one(
+        {"_id": ObjectId(report_id)},
+        {
+            "$set": {
+                "status": COMPLETED,
+                "completed_at": datetime.utcnow()
             }
         }
     )

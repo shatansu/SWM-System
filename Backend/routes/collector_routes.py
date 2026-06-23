@@ -3,7 +3,9 @@ from fastapi import HTTPException
 
 from services.collector_service import (
     get_pending_reports,
-    accept_report
+    accept_report,
+    start_pickup,
+    complete_pickup
 )
 
 router = APIRouter()
