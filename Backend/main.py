@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, Form
+from routes.collector_routes import router as collector_router
 
 from services.scan_services import process_scan
 from services.waste_service import save_report
@@ -35,3 +36,6 @@ async def scan(
         "report_id": report_id,
         "ai_result": ai_result
     }
+
+
+app.include_router(collector_router)
