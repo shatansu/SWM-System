@@ -32,3 +32,34 @@ def accept(report_id: str, collector_id: str):
     return {
         "message": "Report Accepted Successfully"
     }
+
+
+@router.patch("/collector/start/{report_id}")
+def start(report_id: str):
+
+    updated = start_pickup(report_id)
+
+    if updated == 0:
+        raise HTTPException(
+            status_code=404,
+            detail="Report not found"
+        )
+
+    return {
+        "message": "Pickup Started"
+    }
+
+@router.patch("/collector/complete/{report_id}")
+def complete(report_id: str):
+
+    updated = complete_pickup(report_id)
+
+    if updated == 0:
+        raise HTTPException(
+            status_code=404,
+            detail="Report not found"
+        )
+
+    return {
+        "message": "Pickup Completed"
+    }
