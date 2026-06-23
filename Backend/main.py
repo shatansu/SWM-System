@@ -5,6 +5,7 @@ import tempfile
 
 from dotenv import load_dotenv
 from google import genai
+import json
 from PIL import Image
 
 # -----------------------------
@@ -54,34 +55,39 @@ async def scan_waste(
     prompt = """
 You are an AI Waste Detection System.
 
-Analyze this image carefully.
+Analyze the uploaded image carefully.
 
-Return ONLY the following information:
+Return ONLY valid JSON.
 
-1. Is this image actually waste? (YES or NO)
+Do NOT write markdown.
+Do NOT use ```json.
+Do NOT write explanation.
 
-2. Waste Category
-(Plastic, Paper, Glass, Metal, Organic, Mixed, Other)
+Return exactly in this format:
 
-3. Confidence Score (0-100)
-
-4. Short Reason (Maximum 20 words)
-
-Return the response in plain text.
+{
+  "is_waste": true,
+  "waste_type": "Plastic",
+  "confidence": 95,
+  "reason": "Plastic bottle lying on road.",
+  "pickup_required": true
+}
 """
 
     # Gemini API Call
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=[prompt, img]
+    
     )
+    ai_result = json.loads(response.text)
 
     # Return Response
     return {
-        "filename": image.filename,
-        "content_type": image.content_type,
-        "latitude": latitude,
-        "longitude": longitude,
-        "user_id": user_id,
-        "ai_result": response.text
-    }
+    "filename": image.filename,
+    "content_type": image.content_type,
+    "latitude": latitude,
+    "longitude": longitude,
+    "user_id": user_id,
+    "ai_result": ai_result
+}
