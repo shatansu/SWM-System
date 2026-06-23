@@ -1,7 +1,7 @@
 from db.mongodb_connection import reports_collection
 from bson import ObjectId
 from datetime import datetime
-
+from constants.status import ACCEPTED
 
 def get_pending_reports():
 
@@ -37,7 +37,7 @@ def accept_report(report_id: str, collector_id: str):
         {"_id": ObjectId(report_id)},
         {
             "$set": {
-                "status": "Accepted",
+                "status": ACCEPTED,
                 "collector_id": collector_id,
                 "accepted_at": datetime.utcnow()
             }

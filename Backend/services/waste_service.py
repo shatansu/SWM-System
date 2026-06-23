@@ -1,5 +1,6 @@
 from datetime import datetime
 from db.mongodb_connection import reports_collection
+from constants.status import PENDING
 
 
 def save_report(
@@ -24,7 +25,7 @@ def save_report(
         "reason": ai_result["reason"],
         "pickup_required": ai_result["pickup_required"],
 
-        "status": "Pending",
+        "status": PENDING,
 
         "created_at": datetime.utcnow()
     }
