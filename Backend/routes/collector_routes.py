@@ -5,7 +5,8 @@ from services.collector_service import (
     get_pending_reports,
     accept_report,
     start_pickup,
-    complete_pickup
+    complete_pickup,
+    reject_report
 )
 
 router = APIRouter()
@@ -62,4 +63,28 @@ def complete(report_id: str):
 
     return {
         "message": "Pickup Completed"
+    }
+
+
+@router.patch("/collector/reject/{report_id}")
+def reject(
+    report_id: str,
+    collector_id: str,
+    reason: str
+):
+
+    updated = reject_report(
+        report_id,
+        collector_id,
+        reason
+    )
+
+    if updated == 0:
+        raise HTTPException(
+            status_code=404,
+            detail="Report not found"
+        )
+
+    return {
+        "message": "Report Rejected Successfully"
     }

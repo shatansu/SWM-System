@@ -1,7 +1,7 @@
 from db.mongodb_connection import reports_collection
 from bson import ObjectId
 from datetime import datetime
-from constants.status import ACCEPTED, ON_THE_WAY, COMPLETED
+from constants.status import ACCEPTED, ON_THE_WAY, COMPLETED, REJECTED
 
 def get_pending_reports():
 
@@ -68,6 +68,26 @@ def complete_pickup(report_id: str):
             "$set": {
                 "status": COMPLETED,
                 "completed_at": datetime.utcnow()
+            }
+        }
+    )
+
+    return result.modified_count
+
+def reject_report(
+    report_id: str,
+    collector_id: str,
+    reason: str
+):
+
+    result = reports_collection.update_one(
+        {"_id": ObjectId(report_id)},
+        {
+            "$set": {
+                "status": REJECTED,
+                "collector_id": collector_id,
+                "rejected_reason": reason,
+                "rejected_at": datetime.utcnow()
             }
         }
     )
