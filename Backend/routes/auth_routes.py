@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException,Header
+from fastapi import APIRouter, HTTPException
 from models.user_model import (
     UserRegister,
     UserLogin
@@ -61,9 +61,7 @@ def login(user: UserLogin):
 
 
 @router.get("/auth/me")
-def me(
-    authorization: str = Header(...)
-):
+def me(current_user = Depends(get_current_user)):
     return {
-        "header": authorization
+        "user": current_user
     }
