@@ -29,6 +29,17 @@ def save_report(
 
         "collector_id": None,
 
+        "collector_location": {
+    "latitude": None,
+    "longitude": None,
+    "updated_at": None
+},
+
+"accepted_at": None,
+"on_the_way_at": None,
+"arrived_at": None,
+"completed_at": None,
+
         "rejection_history": [],
 
         "created_at": datetime.utcnow()
