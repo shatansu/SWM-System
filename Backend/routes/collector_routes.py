@@ -13,9 +13,9 @@ router = APIRouter()
 
 
 @router.get("/collector/reports")
-def collector_reports():
+def collector_reports(collector_id: str):
 
-    reports = get_pending_reports()
+    reports = get_pending_reports(collector_id)
 
     return reports
 

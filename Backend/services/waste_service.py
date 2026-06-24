@@ -27,6 +27,10 @@ def save_report(
 
         "status": PENDING,
 
+        "collector_id": None,
+
+        "rejection_history": [],
+
         "created_at": datetime.utcnow()
     }
 

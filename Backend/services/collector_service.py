@@ -1,13 +1,18 @@
 from db.mongodb_connection import reports_collection
 from bson import ObjectId
 from datetime import datetime
-from constants.status import ACCEPTED, ON_THE_WAY, COMPLETED, REJECTED
+from constants.status import ACCEPTED, ON_THE_WAY, COMPLETED, REJECTED, PENDING
 
-def get_pending_reports():
+def get_pending_reports(collector_id: str):
 
     reports = list(
-        reports_collection.find(
-            {"status": "Pending"},
+       reports_collection.find(
+    {
+        "status": PENDING,
+        "rejection_history.collector_id": {
+            "$ne": collector_id
+        }
+    },
             {
                 "_id": 1,
                 "user_id": 1,
@@ -81,15 +86,35 @@ def reject_report(
 ):
 
     result = reports_collection.update_one(
-        {"_id": ObjectId(report_id)},
+
+        {
+            "_id": ObjectId(report_id)
+        },
+
         {
             "$set": {
-                "status": REJECTED,
-                "collector_id": collector_id,
-                "rejected_reason": reason,
-                "rejected_at": datetime.utcnow()
+                "status": PENDING,
+                "collector_id": None
+            },
+
+            "$unset": {
+                "accepted_at": ""
+            },
+
+            "$push": {
+                "rejection_history": {
+
+                    "collector_id": collector_id,
+
+                    "reason": reason,
+
+                    "rejected_at": datetime.utcnow()
+
+                }
             }
+
         }
+
     )
 
     return result.modified_count
