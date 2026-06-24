@@ -48,7 +48,7 @@ def start(report_id: str):
         )
 
     return {
-        "message": "Pickup Started"
+        "message": "Collector is on the way"
     }
 
 @router.patch("/collector/complete/{report_id}")
