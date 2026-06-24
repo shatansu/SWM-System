@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from fastapi import HTTPException
+from services.collector_service import update_collector_location
 
 from services.collector_service import (
     get_pending_reports,
