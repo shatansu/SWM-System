@@ -32,9 +32,6 @@ def get_pending_reports(collector_id: str):
 
     return reports
 
-from bson import ObjectId
-from datetime import datetime
-
 
 def accept_report(report_id: str, collector_id: str):
 
@@ -113,6 +110,32 @@ def reject_report(
                 }
             }
 
+        }
+
+    )
+
+    return result.modified_count
+
+
+def update_collector_location(
+    collector_id: str,
+    latitude: float,
+    longitude: float
+):
+
+    result = reports_collection.update_many(
+
+        {
+            "collector_id": collector_id,
+            "status": ON_THE_WAY
+        },
+
+        {
+            "$set": {
+                "collector_location.latitude": latitude,
+                "collector_location.longitude": longitude,
+                "collector_location.updated_at": datetime.utcnow()
+            }
         }
 
     )
