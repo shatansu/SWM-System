@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException,Header
 from models.user_model import (
     UserRegister,
     UserLogin
@@ -8,6 +8,14 @@ from services.auth_service import (
     register_user,
     login_user
 )
+
+
+from fastapi import Depends
+
+from auth.dependencies import get_current_user
+
+
+
 
 router = APIRouter()
 
@@ -48,4 +56,14 @@ def login(user: UserLogin):
     return {
         "access_token": token,
         "token_type": "Bearer"
+    }
+
+
+
+@router.get("/auth/me")
+def me(
+    authorization: str = Header(...)
+):
+    return {
+        "header": authorization
     }
