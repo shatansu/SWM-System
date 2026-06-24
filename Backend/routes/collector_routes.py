@@ -89,3 +89,26 @@ def reject(
     return {
         "message": "Report Rejected Successfully"
     }
+
+@router.patch("/collector/location")
+def update_location(
+    collector_id: str,
+    latitude: float,
+    longitude: float
+):
+
+    updated = update_collector_location(
+        collector_id,
+        latitude,
+        longitude
+    )
+
+    if updated == 0:
+        raise HTTPException(
+            status_code=404,
+            detail="No active pickup found for this collector."
+        )
+
+    return {
+        "message": "Collector location updated successfully."
+    }
