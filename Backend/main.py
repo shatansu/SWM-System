@@ -3,6 +3,7 @@ from routes.collector_routes import router as collector_router
 
 from services.scan_services import process_scan
 from services.waste_service import save_report
+from routes.auth_routes import router as auth_router
 app = FastAPI()
 
 
@@ -39,3 +40,5 @@ async def scan(
 
 
 app.include_router(collector_router)
+
+app.include_router(auth_router)

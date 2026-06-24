@@ -13,6 +13,9 @@ db = client["eco_visionars"]
 
 reports_collection = db["reports"]
 
+users_collection = db["users"]
+
 print("✅ MongoDB Connected Successfully")
+
 
 
