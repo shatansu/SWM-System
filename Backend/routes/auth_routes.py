@@ -1,8 +1,13 @@
 from fastapi import APIRouter, HTTPException
+from models.user_model import (
+    UserRegister,
+    UserLogin
+)
 
-from models.user_model import UserRegister
-
-from services.auth_service import register_user
+from services.auth_service import (
+    register_user,
+    login_user
+)
 
 router = APIRouter()
 
@@ -24,4 +29,23 @@ def register(user: UserRegister):
         "message": "User registered successfully",
 
         "user_id": user_id
+    }
+
+
+
+@router.post("/auth/login")
+def login(user: UserLogin):
+
+    token = login_user(user)
+
+    if token is None:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid Email or Password"
+        )
+
+    return {
+        "access_token": token,
+        "token_type": "Bearer"
     }
