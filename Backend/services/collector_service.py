@@ -51,16 +51,22 @@ def accept_report(report_id: str, collector_id: str):
 def start_pickup(report_id: str):
 
     result = reports_collection.update_one(
-        {"_id": ObjectId(report_id)},
+
+        {
+            "_id": ObjectId(report_id)
+        },
+
         {
             "$set": {
                 "status": ON_THE_WAY,
-                "started_at": datetime.utcnow()
+                "on_the_way_at": datetime.utcnow()
             }
         }
+
     )
 
     return result.modified_count
+
 
 def complete_pickup(report_id: str):
 
