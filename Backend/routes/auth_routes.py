@@ -65,3 +65,19 @@ def me(current_user = Depends(get_current_user)):
     return {
         "user": current_user
     }
+
+
+
+from auth.role_checker import require_role
+from fastapi import Depends
+
+
+@router.get("/collector/test")
+def collector_test(
+    current_user=Depends(
+        require_role("collector")
+    )
+):
+    return {
+        "message": "Collector Access Granted"
+    }
